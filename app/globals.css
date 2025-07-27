@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 120 38% 44%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 120 38% 44%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 120 38% 44%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 120 38% 44%;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    font-size: 11pt;
+  }
+
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .ficha-tecnica-print {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ficha-tecnica-print img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 100vh;
+  }
+
+  /* Asegurar que los colores se impriman correctamente */
+  .bg-\[\#5D9848\] {
+    background-color: #5d9848 !important;
+  }
+
+  .bg-\[\#C25B28\] {
+    background-color: #c25b28 !important;
+  }
+
+  .text-white {
+    color: white !important;
+  }
+
+  .bg-green-100 {
+    background-color: #dcfce7 !important;
+  }
+
+  .bg-red-50 {
+    background-color: #fef2f2 !important;
+  }
+
+  .border-green-300 {
+    border-color: #86efac !important;
+  }
+
+  /* Reducir espaciado para impresión */
+  .p-6 {
+    padding: 1rem !important;
+  }
+
+  .p-4 {
+    padding: 0.75rem !important;
+  }
+
+  .p-3 {
+    padding: 0.5rem !important;
+  }
+
+  .p-2 {
+    padding: 0.25rem !important;
+  }
+
+  .p-1 {
+    padding: 0.125rem !important;
+  }
+
+  .my-4 {
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .my-3 {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .mt-4 {
+    margin-top: 0.75rem !important;
+  }
+
+  .mt-3 {
+    margin-top: 0.5rem !important;
+  }
+
+  .mb-4 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .mb-3 {
+    margin-bottom: 0.5rem !important;
+  }
+
+  .gap-4 {
+    gap: 0.75rem !important;
+  }
+
+  .gap-3 {
+    gap: 0.5rem !important;
+  }
+
+  .gap-2 {
+    gap: 0.25rem !important;
+  }
+
+  /* Evitar saltos de página no deseados */
+  .page-break-before {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Evitar que las imágenes se dividan entre páginas */
+  img {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Asegurar que los contenedores de imágenes no generen saltos de página adicionales */
+  .mb-4,
+  .mt-8 {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Ajustar el tamaño de las imágenes para que se ajusten mejor a la página */
+  .object-contain {
+    max-height: 90vh;
+  }
+
+  /* Eliminar espacios en blanco innecesarios */
+  .mt-6.page-break-before {
+    margin-top: 0 !important;
+  }
+}
