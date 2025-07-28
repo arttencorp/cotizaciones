@@ -1,16 +1,46 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Key, useEffect, useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Printer, ArrowLeft, Download, FileEdit } from "lucide-react"
 
+interface Cotizacion {
+  tipoDocumento?: string
+  numeroCotizacion?: string
+  razonSocial?: string
+  dniRuc?: string
+  direccion?: string
+  telefono?: string
+  fechaEmision?: string | number | Date
+  fechaVencimiento?: string | number | Date
+  items?: Array<{
+    codigo?: string
+    descripcion?: string
+    cantidad?: number
+    precioUnitario?: number
+    total?: number
+  }>
+  subtotal?: number
+  impuesto?: number
+  total?: number
+  totalTexto?: string
+  terminosCondiciones?: string
+  certificadosCalidad?: string
+  lugarRecojo?: string
+  formaPago?: string
+  formaEntrega?: string
+  tipoProductoSeleccionado?: string
+  preciosConIGV?: boolean
+  fichasTecnicas?: Array<{ archivo?: string }>
+}
+
 export default function ImprimirCotizacion() {
   const router = useRouter()
-  const [cotizacion, setCotizacion] = useState(null)
+  const [cotizacion, setCotizacion] = useState<Cotizacion | null>(null)
   const [cargando, setCargando] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     try {
@@ -21,7 +51,7 @@ export default function ImprimirCotizacion() {
 
         // Asegurarse de que los items tengan la propiedad codigo
         if (cotizacionData.items) {
-          cotizacionData.items = cotizacionData.items.map((item) => ({
+          cotizacionData.items = cotizacionData.items.map((item: { codigo: any }) => ({
             ...item,
             codigo: item.codigo || "",
           }))
@@ -66,7 +96,7 @@ export default function ImprimirCotizacion() {
   }
 
   // Formatear fecha
-  const formatearFecha = (fechaStr) => {
+  const formatearFecha = (fechaStr: string | number | Date) => {
     if (!fechaStr) return ""
     try {
       const fecha = new Date(fechaStr)
@@ -96,7 +126,7 @@ export default function ImprimirCotizacion() {
   }
 
   // Función para convertir número a texto (copiada de la página de creación)
-  const numeroATexto = (numero) => {
+  const numeroATexto = (numero: number) => {
     if (typeof numero !== "number") {
       return "cero y 00/100"
     }
@@ -203,9 +233,9 @@ export default function ImprimirCotizacion() {
     if (cotizacion && cotizacion.fichasTecnicas && cotizacion.fichasTecnicas.length > 0) {
       try {
         // Precargar las imágenes para asegurar que se muestren correctamente
-        cotizacion.fichasTecnicas.forEach((ficha) => {
+        cotizacion.fichasTecnicas.forEach((ficha: { archivo?: string }) => {
           if (ficha && ficha.archivo) {
-            const img = new Image()
+            const img = document.createElement("img")
             img.crossOrigin = "anonymous" // Evitar problemas CORS
             img.src = ficha.archivo
           }
@@ -257,17 +287,17 @@ export default function ImprimirCotizacion() {
   const tieneASWG =
     cotizacion.items &&
     Array.isArray(cotizacion.items) &&
-    cotizacion.items.some((item) => item && item.codigo === "ASWG")
+    cotizacion.items.some(item => item && item.codigo === "ASWG")
 
   const tieneASC5 =
     cotizacion.items &&
     Array.isArray(cotizacion.items) &&
-    cotizacion.items.some((item) => item && item.codigo === "ASC5")
+    cotizacion.items.some(item => item && item.codigo === "ASC5")
 
   const tieneLAB =
     cotizacion.items &&
     Array.isArray(cotizacion.items) &&
-    cotizacion.items.some((item) => item && item.codigo === "LAB")
+    cotizacion.items.some(item => item && item.codigo === "LAB")
 
   // Determinar el tipo de producto principal
   const esLaboratorio = tieneLAB || cotizacion.tipoProductoSeleccionado === "laboratorio"
@@ -350,10 +380,10 @@ export default function ImprimirCotizacion() {
           </div>
           <div className="w-1/2 text-right">
             <p>
-              <span className="font-semibold">Fecha de emisión:</span> {formatearFecha(cotizacion.fechaEmision)}
+              <span className="font-semibold">Fecha de emisión:</span> {String(formatearFecha(cotizacion.fechaEmision ?? ""))}
             </p>
             <p>
-              <span className="font-semibold">Fecha de vencimiento:</span> {formatearFecha(cotizacion.fechaVencimiento)}
+              <span className="font-semibold">Fecha de vencimiento:</span> {formatearFecha(cotizacion.fechaVencimiento ?? "").toString()}
             </p>
           </div>
         </div>
@@ -374,17 +404,30 @@ export default function ImprimirCotizacion() {
           <tbody>
             {cotizacion.items &&
               Array.isArray(cotizacion.items) &&
-              cotizacion.items.map((item, index) => (
-                <tr
-                  key={index}
-                  className={`border-b border-gray-200 ${esLaboratorio && index % 2 === 0 ? "bg-gray-50" : ""}`}
-                >
-                  <td className="p-1.5 text-left">{item?.descripcion || ""}</td>
-                  <td className="p-1.5 text-center">{item?.cantidad || 0}</td>
-                  <td className="p-1.5 text-right">S/{(item?.precioUnitario || 0).toFixed(2)}</td>
-                  <td className="p-1.5 text-right">S/{(item?.total || 0).toFixed(2)}</td>
-                </tr>
-              ))}
+              cotizacion.items.map(
+                (
+                  item: {
+                    codigo?: string
+                    descripcion?: string
+                    cantidad?: number
+                    precioUnitario?: number
+                    total?: number
+                  },
+                  index: number
+                ) => (
+                  <tr
+                    key={index}
+                    className={`border-b border-gray-200 ${
+                      esLaboratorio && typeof index === "number" && index % 2 === 0 ? "bg-gray-50" : ""
+                    }`}
+                  >
+                    <td className="p-1.5 text-left">{item?.descripcion || ""}</td>
+                    <td className="p-1.5 text-center">{item?.cantidad || 0}</td>
+                    <td className="p-1.5 text-right">S/{(item?.precioUnitario || 0).toFixed(2)}</td>
+                    <td className="p-1.5 text-right">S/{(item?.total || 0).toFixed(2)}</td>
+                  </tr>
+                )
+              )}
           </tbody>
           <tfoot>
             <tr>

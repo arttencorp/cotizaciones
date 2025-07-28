@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from "react"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { ChevronLeft, FileEdit, Printer, Download } from "lucide-react"
@@ -8,8 +8,32 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
+// Tipos para cotizaciones
+type Cotizacion = {
+  id: string
+  fecha: string
+  validez: string
+  estado: string
+  cliente: {
+    nombre: string
+    email: string
+    telefono: string
+    direccion: string
+  }
+  items: {
+    id: number
+    descripcion: string
+    cantidad: number
+    precioUnitario: number
+    total: number
+  }[]
+  notas: string
+}
+
+type CotizacionesEjemplo = Record<string, Cotizacion>
+
 // Datos de ejemplo para cotizaciones
-const cotizacionesEjemplo = {
+const cotizacionesEjemplo: CotizacionesEjemplo = {
   "COT-001": {
     id: "COT-001",
     fecha: "2024-04-01",
@@ -101,14 +125,15 @@ const cotizacionesEjemplo = {
 export default function DetalleCotizacion() {
   const params = useParams()
   const router = useRouter()
-  const [cotizacion, setCotizacion] = useState(null)
+  const [cotizacion, setCotizacion] = useState<Cotizacion | null>(null)
   const [cargando, setCargando] = useState(true)
 
   useEffect(() => {
     // Simulando carga de datos
     setTimeout(() => {
-      const id = params.id
-      if (cotizacionesEjemplo[id]) {
+      const idParam = params.id
+      const id = Array.isArray(idParam) ? idParam[0] : idParam
+      if (typeof id === "string" && cotizacionesEjemplo[id]) {
         setCotizacion(cotizacionesEjemplo[id])
       }
       setCargando(false)
@@ -150,7 +175,7 @@ export default function DetalleCotizacion() {
   }
 
   // Calcular subtotal
-  const subtotal = cotizacion.items.reduce((sum, item) => sum + item.total, 0)
+  const subtotal = cotizacion.items.reduce((sum: number, item: { total: number }) => sum + item.total, 0)
   const impuesto = subtotal * 0.16 // 16% de impuesto
   const total = subtotal + impuesto
 
@@ -268,7 +293,7 @@ export default function DetalleCotizacion() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {cotizacion.items.map((item) => (
+                {cotizacion.items.map((item: { id: Key | null | undefined; descripcion: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; cantidad: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; precioUnitario: number; total: number }) => (
                   <TableRow key={item.id}>
                     <TableCell>{item.descripcion}</TableCell>
                     <TableCell>{item.cantidad}</TableCell>
