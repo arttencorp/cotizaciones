@@ -74,6 +74,22 @@ export interface InformacionGeneralProps {
   onSiguiente: () => void
 }
 
+export interface InformacionAdicionalProps {
+  lugarRecojo: string
+  setLugarRecojo: (value: string) => void
+  formaEntrega: string
+  setFormaEntrega: (value: string) => void
+  formaPago: FormaPago
+  setFormaPago: (value: FormaPago) => void
+  terminosCondiciones: string
+  setTerminosCondiciones: (value: string) => void
+  certificadosCalidad: string
+  setCertificadosCalidad: (value: string) => void
+  tieneLaboratorio: boolean
+  onAnterior: () => void
+  onVistaPrevia: () => void
+}
+
 export interface ProductosServiciosProps {
   items: Item[]
   preciosConIGV: boolean

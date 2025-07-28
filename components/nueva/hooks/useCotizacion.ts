@@ -18,7 +18,7 @@ export function useCotizacion() {
   const router = useRouter();
   
   // Estados principales
-  const [activeTab, setActiveTab] = useState<TabName>('informacion');
+  const [activeTab, setActiveTab] = useState('informacion');
   const [tipoDocumento, setTipoDocumento] = useState<TipoDocumento>('cotizacion');
   const [preciosConIGV, setPreciosConIGV] = useState(false);
   
